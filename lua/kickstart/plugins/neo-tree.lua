@@ -22,6 +22,7 @@ return {
       window = {
         mappings = {
           ['\\'] = 'close_window',
+          ['<space>'] = { 'toggle_node', nowait = true },
         },
       },
     },
