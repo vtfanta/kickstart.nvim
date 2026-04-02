@@ -204,13 +204,16 @@ vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagn
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
 --
 -- Open a small terminal
+local job_id = 0
 vim.keymap.set('n', '<space>st', function()
   vim.cmd.vnew()
   vim.cmd.term()
   vim.cmd.wincmd 'J'
   vim.cmd.start()
   vim.api.nvim_win_set_height(0, 5)
-end, { desc = 'Start small [T]erminal' })
+
+  job_id = vim.bo.channel
+end, { desc = '[S]tart small [T]erminal' })
 
 -- TIP: Disable arrow keys in normal mode
 -- vim.keymap.set('n', '<left>', '<cmd>echo "Use h to move!!"<CR>')
@@ -979,8 +982,14 @@ require('lazy').setup({
   },
 })
 
--- neo-tree command
--- vim.keymap.set('n', '<leader>n', ':Neotree toggle filesystem reveal left<CR>', { desc = 'Toggle [N]eo-tree file explorer' })
+-- Julia REPL stuff
+-- vim.keymap.set('n', '<space><Enter>', function() print 'Hello there!' end, { desc = 'Execute in Julia REPL' })
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = 'julia',
+  callback = function()
+    vim.keymap.set('n', '<space><Enter>', function() print(vim.api.nvim_get_current_line()) end, { desc = 'Execute in Julia REPL' })
+  end,
+})
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
